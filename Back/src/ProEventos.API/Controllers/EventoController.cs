@@ -3,60 +3,36 @@ using System.Linq;
 using ProEventos.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using ProEventos.API.Data;
 
 namespace ProEventos.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
-    {      
-
-        public IEnumerable<Evento> _evento = new Evento[]{
-                new Evento(){
-                    EventoId = 1,
-                    Tema = "Angular 11 e .Net 5",
-                    Local = "RJ",
-                    QtdePessoas = 250,
-                    DataEvento = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
-                    ImagemURL = "foto.png"
-                },
-                new Evento(){
-                    EventoId = 2,
-                    Tema = "Angular kkkkkkkk",
-                    Local = "SP",
-                    QtdePessoas = 1000,
-                    DataEvento = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"),
-                    ImagemURL = "foto.png"
-                }
-            };
-
-        public EventoController()
-        {            
+    {
+        private readonly DataContext _context; 
+        public EventoController(DataContext context)
+        { 
+            _context = context;           
         }
 
         [HttpGet("registro")]
         public Evento Get()
         {     
-            return new Evento(){
-                EventoId = 1,
-                Tema = "Angular 11 e .Net 5",
-                Local = "RJ",
-                QtdePessoas = 250,
-                DataEvento = DateTime.Now.AddDays(2).ToString(),
-                ImagemURL = "foto.png"
-            };     
+            return _context.Eventos.FirstOrDefault();
         }
 
         [HttpGet("lista")]
         public IEnumerable<Evento> GetListaEvento()
         {
-            return _evento;
+            return _context.Eventos;
         } 
 
         [HttpGet("lista/{id}")]
         public IEnumerable<Evento> GetListaEvento(int id)
         {
-            return _evento.Where(x => x.EventoId == id);
+            return _context.Eventos.Where(x => x.EventoId == id);
         } 
 
 
@@ -79,3 +55,24 @@ namespace ProEventos.API.Controllers
         }
     }
 }
+
+/*
+public IEnumerable<Evento> _evento = new Evento[]{
+                new Evento(){
+                    EventoId = 1,
+                    Tema = "Angular 11 e .Net 5",
+                    Local = "RJ",
+                    QtdePessoas = 250,
+                    DataEvento = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
+                    ImagemURL = "foto.png"
+                },
+                new Evento(){
+                    EventoId = 2,
+                    Tema = "Angular kkkkkkkk",
+                    Local = "SP",
+                    QtdePessoas = 1000,
+                    DataEvento = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"),
+                    ImagemURL = "foto.png"
+                }
+            };
+*/
